@@ -1,18 +1,32 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
+using TMPro;
 
 public class FPSController : MonoBehaviour
 {
+    public static FPSController instance;
+
     public float speed = 3f;
     public float jumpForce = 5f;
-    public float raycastDistance = 1.1f;
+    public float raycastDistance = 1.2f;
     private Rigidbody rb;
+
+    [Header("Score")]
+    public int score = 0;
+    public TMP_Text scoreText;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        UpdateScoreText();
     }
 
     private void Update()
@@ -24,6 +38,19 @@ public class FPSController : MonoBehaviour
     {
         Move();
     }
+
+    public void AddScore(int amount)
+    {
+        score += amount;
+        UpdateScoreText();
+    }
+
+    private void UpdateScoreText()
+    {
+        if (scoreText != null)
+            scoreText.text = "Score: " + score;
+    }
+
     private void Move()
     {
         float h = Input.GetAxis("Horizontal");

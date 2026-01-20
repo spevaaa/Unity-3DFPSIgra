@@ -13,10 +13,14 @@ public class PlayerCameraController : MonoBehaviour
     private Vector2 currentLookingPosition;
 
     public Texture2D crosshairTexture;
-    private Rect crosshairPosition;
     public float crosshairScale = 1;
 
     public AudioSource shootingAudioSource;
+
+    public PauseController pauseController;
+    public GameObject mainMenuPanel; 
+
+    public GameObject gameOverPanel;
 
     private void Start()
     {
@@ -27,7 +31,6 @@ public class PlayerCameraController : MonoBehaviour
 
     private void OnGUI()
     {
-        //if not paused
         if (Time.timeScale != 0)
         {
             if (crosshairTexture != null)
@@ -39,6 +42,19 @@ public class PlayerCameraController : MonoBehaviour
 
     private void Update()
     {
+
+        if ((mainMenuPanel != null && mainMenuPanel.activeSelf) || (pauseController != null && pauseController.IsPaused) || gameOverPanel.activeSelf)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0f;
+            return;
+        }else
+        {
+            Time.timeScale = 1f;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
         RotateCamera();
         CheckForShooting();
     }
@@ -70,15 +86,13 @@ public class PlayerCameraController : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
             {
-                Debug.Log(hit.collider.name);
 
-                /* Ovo je za iduću vježbu
                 if(hit.collider.tag == "Enemy")
                 {
                     EnemyHealth eHealth = hit.collider.GetComponent<EnemyHealth>();
-                    eHealth.TakeDamage(10);
+                    eHealth.TakeDamage(25);
                 }
-                */
+            
             }
         }
     }

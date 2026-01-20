@@ -4,9 +4,12 @@ public class PauseController : MonoBehaviour
 {
     public GameObject pausePanel;
 
+    public GameObject gameOverPanel;
+
     private bool isPaused = false;
 
     public bool IsPaused => isPaused;
+    
 
     void Start()
     {
@@ -15,7 +18,7 @@ public class PauseController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && gameOverPanel.activeSelf == false)
         {
             if (isPaused)
                 ResumeGame();

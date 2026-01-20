@@ -1,5 +1,5 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour {
@@ -7,7 +7,7 @@ public class PlayerHealth : MonoBehaviour {
     public int startingHealth = 100;                            
     public int currentHealth;                                   
     public Slider healthSlider;
-    public TMP_Text gameOverText;                           
+    public GameObject gameOverPanel;                      
 
 
     bool isDead;
@@ -21,7 +21,7 @@ public class PlayerHealth : MonoBehaviour {
 
     void Awake()
     {
-        gameOverText.enabled = false;
+        gameOverPanel.SetActive(false);
 
         currentHealth = startingHealth;
         healthSlider.value = currentHealth;
@@ -47,8 +47,15 @@ public class PlayerHealth : MonoBehaviour {
     {
         isDead = true;
 
-        gameOverText.enabled = true;
+        Time.timeScale = 0f;
+        gameOverPanel.SetActive(true);
 
         this.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
